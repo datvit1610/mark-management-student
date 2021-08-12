@@ -43,5 +43,5 @@ Route::get('/logout', [AuthenticateController::class, 'logout'])->name('logout')
 Route::middleware([CheckLogin::class])->group(function () {
     Route::get("/", function () {
         return view('login');
-    });
+    }); //dấcccasd
 });
