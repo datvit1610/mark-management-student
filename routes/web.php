@@ -1,8 +1,19 @@
 <?php
 
+use App\Http\Controllers\AuthenticateController;
 use App\Http\Controllers\Favourite;
-use App\Http\Controllers\StudenController;
+use App\Http\Controllers\MajorController;
+use App\Http\Controllers\StudentController;
+use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\CheckLogged;
+use App\Http\Middleware\CheckLogin;
+//Authentication
+
+//Route::get('/login', [AuthenticateController::class, 'login'])->name('login');
+//Route::post('/login-process', [AuthenticateController::class, 'login-process'])
+//  ->name('login-process');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -14,12 +25,23 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+
+//Route::get('/', function () {
+//  return view('overview');
+//});
 // Route::get('/student/{name}', [StudentController::class, 'getName']);
-Route::get('/student/{soThich}', [StudentController::class, 'soThich']);
-Route::get("/", function () {
-    return view('overview');
+//dang nhap
+
+Route::middleware([CheckLogged::class])->group(function () {
+    // Authenticate
+    Route::get('/login', [AuthenticateController::class, 'login'])->name('login');
+    Route::post('/login-process', [AuthenticateController::class, 'loginProcess'])->name('login-process');
 });
-Route::get('/favourite', [Favourite::class, 'soThich']);
+
+Route::get('/logout', [AuthenticateController::class, 'logout'])->name('logout');
+
+Route::middleware([CheckLogin::class])->group(function () {
+    Route::get("/", function () {
+        return view('login');
+    });
+});
